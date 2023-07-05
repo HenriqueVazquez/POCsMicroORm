@@ -1,0 +1,42 @@
+# Arquivos gerados pelo Visual Studio
+.vs/
+bin/
+obj/
+
+# Arquivos de compilação
+*.dll
+*.exe
+*.pdb
+*.cache
+
+# Arquivos de publicação
+*.publish.xml
+*.publish/
+
+# Arquivos gerados pelo NuGet
+packages/
+
+# Arquivos gerados pelo MSBuild
+*.nuget.props
+*.nuget.targets
+
+# Arquivos de análise de código
+*.suo
+*.user
+*.sln.docstates
+
+# Logs
+*.logs
+
+# Arquivos temporários
+*.tmp
+*.swp
+*~
+
+# Arquivos de configuração locais
+appsettings.Development.json
+launchSettings.json
+
+# Arquivos de ferramentas de terceiros
+/_ReSharper*/
+*.resharper*
