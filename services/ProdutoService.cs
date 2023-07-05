@@ -1,23 +1,19 @@
-﻿using Dapper;
-using System.Data.SqlClient;
+﻿using PetaPoco;
 
 namespace POCMicroORM.services
 {
     public class ProdutoService
     {
-        private string connectionString = "Server=./;Database=DB_POCMicroORM; User Id=sa;Password=123456;TrustServerCertificate=true";
-
+        private string connectionString = "Server=./;Database=DB_POCMicroORM;User Id=sa;Password=123456;TrustServerCertificate=true";
 
         private void CriarBancoDeDadosETabelaSeNaoExistirem()
         {
-            string masterConnectionString = "Server=./;Database=master; User Id=sa;Password=123456;TrustServerCertificate=true";
+            string masterConnectionString = "Server=./;Database=master;User Id=sa;Password=123456;TrustServerCertificate=true";
             string createDatabaseQuery = "IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'DB_POCMicroORM') CREATE DATABASE DB_POCMicroORM;";
 
-            using (var connection = new SqlConnection(masterConnectionString))
+            using (var db = new Database(masterConnectionString, "System.Data.SqlClient"))
             {
-                connection.Open();
-
-                connection.Execute(createDatabaseQuery);
+                db.Execute(createDatabaseQuery);
             }
 
             string createTableQuery = @"
@@ -30,11 +26,9 @@ namespace POCMicroORM.services
                     Preco DECIMAL(18,2) NOT NULL
                 );";
 
-            using (var connection = new SqlConnection(connectionString))
+            using (var db = new Database(connectionString, "System.Data.SqlClient"))
             {
-                connection.Open();
-
-                connection.Execute(createTableQuery);
+                db.Execute(createTableQuery);
             }
         }
 
@@ -42,52 +36,40 @@ namespace POCMicroORM.services
         {
             CriarBancoDeDadosETabelaSeNaoExistirem();
 
-            using var connection = new SqlConnection(connectionString);
-            connection.Open();
-
-            connection.Execute("INSERT INTO Produtos (Nome, Preco) VALUES (@Nome, @Preco)", produto);
+            using var db = new Database(connectionString, "System.Data.SqlClient");
+            db.Insert(produto);
         }
 
         public void UpdateProduto(int idProduto, Produto produto)
         {
-            using var connection = new SqlConnection(connectionString);
-            connection.Open();
-
+            using var db = new Database(connectionString, "System.Data.SqlClient");
             produto.Id = idProduto;
-
-            connection.Execute("UPDATE Produtos SET Nome = @Nome, Preco = @Preco WHERE Id = @Id", produto);
+            db.Update(produto);
         }
 
         public Produto SelecionarProdutoID(int idProduto)
         {
-            using var connection = new SqlConnection(connectionString);
-            connection.Open();
-
-            return connection.QueryFirstOrDefault<Produto>("SELECT * FROM Produtos WHERE Id = @Id", new { Id = idProduto });
+            using var db = new Database(connectionString, "System.Data.SqlClient");
+            return db.SingleOrDefault<Produto>("SELECT * FROM Produtos WHERE Id = @0", idProduto);
         }
 
         public void DeleteProduto(int idProduto)
         {
-            using var connection = new SqlConnection(connectionString);
-            connection.Open();
-
-            connection.Execute("DELETE FROM Produtos WHERE Id = @Id", new { Id = idProduto });
+            using var db = new Database(connectionString, "System.Data.SqlClient");
+            db.Delete<Produto>(idProduto);
         }
 
         public void DeleteUltimoProduto()
         {
-            using var connection = new SqlConnection(connectionString);
-            connection.Open();
-
+            using var db = new Database(connectionString, "System.Data.SqlClient");
             // Consulta para selecionar o último produto inserido
             var query = "SELECT TOP 1 Id FROM Produtos ORDER BY Id DESC";
-            var ultimoProdutoId = connection.QueryFirstOrDefault<int>(query);
+            var ultimoProdutoId = db.ExecuteScalar<int>(query);
 
             if (ultimoProdutoId > 0)
             {
-                DeleteProduto(ultimoProdutoId);
+                db.Delete<Produto>(ultimoProdutoId);
             }
         }
-
     }
 }

@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PetaPoco;
 
-namespace POCMicroORM
+[TableName("Produtos")] // Especifica o nome da tabela no banco de dados
+[PrimaryKey("Id")] // Especifica a chave primária
+public class Produto
 {
-    public class Produto
-    {        
-        public int Id { get; set; }
-        public string? Nome { get; set; }
-        public decimal Preco { get; set; }
-    }
+    [Column("Id")] // Especifica o nome da coluna correspondente à propriedade
+    public int Id { get; set; }
 
+    [Column("Nome")]
+    public string? Nome { get; set; }
+
+    [Column("Preco")]
+    public decimal Preco { get; set; }
 }

@@ -10,16 +10,11 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.143" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="PetaPoco.DBEntityGenerator" Version="0.1.2" />
+    <PackageReference Include="PetaPoco.SqlKata" Version="2.1.11" />
+    <PackageReference Include="StaTypPocoQueries.PetaPoco" Version="1.5.8" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EditorConfigFiles Remove="C:\Users\HeK\Documents\udemy\c# Completo\POCMicroORM\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="C:\Users\HeK\Documents\udemy\c# Completo\POCMicroORM\.editorconfig" />
   </ItemGroup>
 
 </Project>
